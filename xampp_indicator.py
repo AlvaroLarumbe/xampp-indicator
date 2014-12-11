@@ -120,6 +120,7 @@ def update_status():
 
     all_statuses = get_statuses()
 
+    # Update labels
     menu_ws.set_label("Apache\t-\t%s" % all_statuses["APACHE"])
     menu_db.set_label("MySQL\t-\t%s" % all_statuses["MYSQL"])
     menu_ftp.set_label("ProFTPD\t-\t%s" % all_statuses["PROFTPD"])
