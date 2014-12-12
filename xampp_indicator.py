@@ -24,8 +24,9 @@ WS = "apache"
 DB = "mysql"
 FTP = "ftp"
 RUN = "RUNNING"
-STOP = "NOTRUNNING"
+NORUN = "NOTRUNNING"
 DEAC = "DEACTIVATED"
+STOP = "STOPPED"
 
 
 # Returns a string representing a call to the xampp script
@@ -121,51 +122,57 @@ def update_status():
     all_statuses = get_statuses()
 
     # Update labels
-    menu_ws.set_label("Apache\t-\t%s" % all_statuses["APACHE"])
-    menu_db.set_label("MySQL\t-\t%s" % all_statuses["MYSQL"])
-    menu_ftp.set_label("ProFTPD\t-\t%s" % all_statuses["PROFTPD"])
+    # menu_ws.set_label("Apache\t-\t%s" % all_statuses["APACHE"])
+    # menu_db.set_label("MySQL\t-\t%s" % all_statuses["MYSQL"])
+    # menu_ftp.set_label("ProFTPD\t-\t%s" % all_statuses["PROFTPD"])
 
-    # Connect signals for Apache
-    if all_statuses["APACHE"] == STOP:
+    # Connect signals and update label for Apache
+    if all_statuses["APACHE"] == NORUN:
         try:
             menu_ws.disconnect(menu_ws_signal)
         except TypeError:
-            None
+            pass
         menu_ws_signal = menu_ws.connect("activate", start_xampp_service, WS)
+        menu_ws.set_label("Apache\t-\t%s" % STOP)
     else:
         try:
             menu_ws.disconnect(menu_ws_signal)
         except TypeError:
-            None
+            pass
         menu_ws_signal = menu_ws.connect("activate", stop_xampp_service, WS)
+        menu_ws.set_label("Apache\t-\t%s" % RUN)
 
-    # Connect signals for MySQL
-    if all_statuses["MYSQL"] == STOP:
+    # Connect signals and update label for MySQL
+    if all_statuses["MYSQL"] == NORUN:
         try:
             menu_db.disconnect(menu_db_signal)
         except TypeError:
-            None
+            pass
         menu_db_signal = menu_db.connect("activate", start_xampp_service, DB)
+        menu_db.set_label("MySQL\t-\t%s" % STOP)
     else:
         try:
             menu_db.disconnect(menu_db_signal)
         except TypeError:
-            None
+            pass
         menu_db_signal = menu_db.connect("activate", stop_xampp_service, DB)
+        menu_db.set_label("MySQL\t-\t%s" % RUN)
 
-    # Connect signals for ProFTPD
-    if (all_statuses["PROFTPD"] == STOP) | (all_statuses["PROFTPD"] == DEAC):
+    # Connect signals and update label for ProFTPD
+    if (all_statuses["PROFTPD"] == NORUN) | (all_statuses["PROFTPD"] == DEAC):
         try:
             menu_ftp.disconnect(menu_ftp_signal)
         except TypeError:
-            None
+            pass
         menu_ftp_signal = menu_ftp.connect("activate", start_xampp_service, FTP)
+        menu_ftp.set_label("ProFTPD\t-\t%s" % STOP)
     else:
         try:
             menu_ftp.disconnect(menu_ftp_signal)
         except TypeError:
-            None
+            pass
         menu_ftp_signal = menu_ftp.connect("activate", stop_xampp_service, FTP)
+        menu_ftp.set_label("ProFTPD\t-\t%s" % STOP)
 
 
 if __name__ == "__main__":
